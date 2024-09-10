@@ -1,0 +1,26 @@
+// src/types/DnsRecordTypes.ts
+
+export type DnsRecordType =
+  | "A"
+  | "AAAA"
+  | "CNAME"
+  | "MX"
+  | "NS"
+  | "PTR"
+  | "SOA"
+  | "SRV"
+  | "TXT"
+  | "CAA"
+  | "DS"
+  | "DNSKEY"
+  | "RRSIG"
+  | "NSEC"
+  | "NAPTR"
+  | "HINFO"
+  | "RP"
+  | "TLSA"
+  | "SSHFP"
+  | "OPT"
+  | "SPF"
+  | "LOC"
+  | "DNAME";

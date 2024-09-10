@@ -2,6 +2,7 @@
 import {DropdownMenuRadioGroupDemo} from "./menu/Dropdown";
 import {Button} from "@/components/ui/button";
 import useStore from "@/store/Auth";
+import axios from "axios";
 import {useState} from "react";
 
 export default function Home() {
@@ -9,6 +10,18 @@ export default function Home() {
   const [input, setInput] = useState("");
   function handleSubmit() {
     console.log(currRecord, "HHHHHH", input);
+    const sent = axios.post(
+      "http://localhost:3000/api/add-data",
+      {
+        hostName: input,
+        recordType: currRecord,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     // current record and input to send over axios
   }
   return (
