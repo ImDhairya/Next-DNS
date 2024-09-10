@@ -9,6 +9,7 @@ export default function Home() {
   const [input, setInput] = useState("");
   function handleSubmit() {
     console.log(currRecord, "HHHHHH", input);
+    // current record and input to send over axios
   }
   return (
     <div className=" md:flex md:items-center sm:justify-center grid place-items-center grid-cols-1 gap-4 h-screen">
