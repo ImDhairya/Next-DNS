@@ -4,13 +4,14 @@ import {DnsModel} from "@/model/Host";
 import {UserModel} from "@/model/Host";
 import {isValidDnsRecord} from "@/app/utils/validateDNSRecord";
 import {hostname} from "os";
+import mongoose from "mongoose";
 
 export async function POST(request: NextRequest) {
   await dbConnect();
 
   try {
     console.log("Reached here");
-    const {hostName, recordType} = await request.json();
+    const {hostName, recordType, id} = await request.json();
     console.log(recordType);
     console.log("Reached here 1");
     if (!isValidDnsRecord(recordType)) {
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
       );
     }
     console.log(hostName);
-    if (!hostName || !recordType) {
+    if (!hostName || !recordType || !id) {
       return NextResponse.json(
         {
           success: false,
@@ -32,11 +33,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const isExists = await DnsModel.findOne({
-      hostName: hostname,
+    const user = await UserModel.findById(id).populate("dnsList");
+
+    if (!user) {
+      return NextResponse.json({message: "User not found"}, {status: 404});
+    }
+
+    const existingRecord = await DnsModel.findOne({
+      user: user._id,
+      hostName,
     });
 
-    if (isExists) {
+    if (existingRecord) {
       console.log(
         "The hostname already exists cannot create same hostname twice"
       );
@@ -47,7 +55,17 @@ export async function POST(request: NextRequest) {
         {status: 500}
       );
     }
-    const newRecord = await DnsModel.create({hostName, recordType});
+    const newRecord = await DnsModel.create({
+      hostName,
+      recordType,
+      user: user._id,
+    });
+
+    let ObjId = new mongoose.Types.ObjectId(newRecord.id);
+
+    user.dnsList?.push(ObjId);
+    // user.dnsList.push(newRecord._id);
+    await user.save();
 
     return NextResponse.json(
       {

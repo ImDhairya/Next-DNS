@@ -1,14 +1,14 @@
 import dbConnect from "@/app/utils/dbConnect";
+import {UserModel} from "@/model/Host";
 // import {UserModel} from "@/model/Host";
-import ClerkModel from "@/model/User";
 import {NextRequest, NextResponse} from "next/server";
 
 export async function POST(request: NextRequest) {
   await dbConnect();
   try {
-    const {clerkId, email} = await request.json();
+    const {id, username, fullName, email} = await request.json();
 
-    if (!email || !clerkId) {
+    if (!email || !id || !username) {
       return NextResponse.json(
         {
           massage: "Please fill all the required fields",
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const isUser = await ClerkModel.findOne({clerkId: clerkId});
+    const isUser = await UserModel.findOne({id});
     if (isUser) {
       return NextResponse.json(
         {
@@ -27,13 +27,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const newUser = await ClerkModel.create({
-      clerkId,
-      email,
-    });
+    // create new user
+
+    await UserModel.create({id, username, fullName, email});
 
     return NextResponse.json({
-      message: "Added to db",
+      message: "User Added to db",
     });
   } catch (error) {
     return NextResponse.json(
