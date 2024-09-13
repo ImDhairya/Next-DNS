@@ -7,6 +7,7 @@ export async function POST(request: NextRequest) {
   await dbConnect();
   try {
     const {id, username, fullName, email} = await request.json();
+    console.log(id, username, fullName, email);
 
     if (!email || !id || !username) {
       return NextResponse.json(
@@ -18,6 +19,7 @@ export async function POST(request: NextRequest) {
     }
 
     const isUser = await UserModel.findOne({id});
+    console.log("Found similar user or not found", isUser);
     if (isUser) {
       return NextResponse.json(
         {
