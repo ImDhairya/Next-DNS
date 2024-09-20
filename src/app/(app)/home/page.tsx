@@ -5,16 +5,20 @@ import {Button} from "@/components/ui/button";
 import useStore from "@/store/Auth";
 import axios from "axios";
 import {useUser} from "@clerk/nextjs";
+import {redirect} from "next/navigation";
 // import {auth} from "@clerk/nextjs/server";
 // import {currentUser} from "@clerk/nextjs/server";
 
 const HomePage = () => {
   const {isSignedIn, user} = useUser();
+  if (!isSignedIn) {
+    redirect("/sign-in");
+  }
   console.log(user, "Lets see what details i get of users");
   const currRecord = useStore((state) => state.record);
   const [input, setInput] = useState("");
   function handleSubmit() {
-    console.log(currRecord, "HHHHHH", input);
+    console.log(currRecord, "HHHHHH", input, user?.id);
     const sendData = axios.post(
       "http://localhost:3000/api/add-data",
       {
@@ -29,15 +33,24 @@ const HomePage = () => {
         },
       }
     );
+  }
 
-    const sendUser = axios.post("http://localhost:3000/api/add-data", {
+  function submitButnon() {
+    console.log(
+      "IIIIIIIIIIIIIIMMMMMMMMPPPPP",
+      user?.id,
+      user?.username,
+      user?.fullName,
+      user?.primaryEmailAddress?.emailAddress
+    );
+    const sendUser = axios.post("http://localhost:3000/api/add-user", {
       id: user?.id,
       username: user?.username,
       fullName: user?.fullName,
       email: user?.primaryEmailAddress?.emailAddress,
     });
     // current record and input to send over axios
-    // Now sending user details over axios to create user if doesnot exists and just add if already exists
+    // Now sending user details over axios to create user if doesnot exists and just add if already exists {id, username, fullName, email}
   }
   return (
     <div className=" md:flex md:items-center sm:justify-center grid place-items-center grid-cols-1 gap-4 h-screen">
@@ -55,6 +68,11 @@ const HomePage = () => {
       <div>
         {/* type (dropdown) */}
         <DropdownMenuRadioGroupDemo />
+      </div>
+      <div>
+        <Button onClick={() => submitButnon()}>
+          Add user (button for testing)
+        </Button>
       </div>
       <div>
         {!currRecord ? null : (

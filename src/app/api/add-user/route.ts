@@ -1,20 +1,21 @@
 import dbConnect from "@/app/utils/dbConnect";
 import {UserModel} from "@/model/Host";
-// import {UserModel} from "@/model/Host";
+import {DnsModel} from "@/model/Host";
 import {NextRequest, NextResponse} from "next/server";
 
 export async function POST(request: NextRequest) {
   await dbConnect();
   try {
     const {id, username, fullName, email} = await request.json();
-    console.log(id, username, fullName, email);
+    console.log(id, username, fullName, email, "GGGGGAAAAAAAYYYYYY");
 
     if (!email || !id || !username) {
       return NextResponse.json(
         {
-          massage: "Please fill all the required fields",
+          // message: "Please fill all the required fields",
+          message: "Please fill all the required fields",
         },
-        {status: 500}
+        {status: 400}
       );
     }
 
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
         {
           massage: "User already exists just login",
         },
-        {status: 200}
+        {status: 409}
       );
     }
 
@@ -33,9 +34,12 @@ export async function POST(request: NextRequest) {
 
     await UserModel.create({id, username, fullName, email});
 
-    return NextResponse.json({
-      message: "User Added to db",
-    });
+    return NextResponse.json(
+      {
+        message: "User Added to db",
+      },
+      {status: 201}
+    );
   } catch (error) {
     return NextResponse.json(
       {

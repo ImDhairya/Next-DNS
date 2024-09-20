@@ -4,6 +4,8 @@ import DNSQuestion, {DNSClass, DNSType, IDNSQuestion} from "./parts/question";
 import DNSAnswer, {IDNSAnswer} from "./parts/answer";
 const port = 53;
 
+// fetching data from the api and putting it instead or inside of the defaultQuestion or defaultAnswer part
+
 const defaultHeader: TDNSHeader = {
   id: 1234,
   qr: 1,
@@ -27,11 +29,11 @@ const defaultQuestion: IDNSQuestion = {
 };
 
 const defaultAnswer: IDNSAnswer = {
-  name: "codecrafeters",
+  name: "codecrafeters.io",
   type: DNSType.A,
   className: DNSClass.IN,
   ttl: 60,
-  data: "1.2.3.4",
+  data: "\x08\x08\x08\x08",
 };
 
 const udpSocket: dgram.Socket = dgram.createSocket("udp4");

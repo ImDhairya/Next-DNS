@@ -3,21 +3,20 @@ import {NextRequest, NextResponse} from "next/server";
 import {DnsModel} from "@/model/Host";
 import {UserModel} from "@/model/Host";
 import {isValidDnsRecord} from "@/app/utils/validateDNSRecord";
-import {hostname} from "os";
 import mongoose from "mongoose";
 
 export async function POST(request: NextRequest) {
   await dbConnect();
 
   try {
-    console.log("Reached here");
+    console.log("Reached Where db is connected ");
     const {hostName, recordType, id} = await request.json();
-    console.log(recordType);
-    console.log("Reached here 1");
+    console.log(recordType, hostName, id, "JJJJJJJJJIUUUUUUUUUUUUUUU");
+    console.log("Reached here and got data to backend");
     if (!isValidDnsRecord(recordType)) {
       return NextResponse.json(
         {
-          massage: "This is not a valid record type",
+          message: "This is not a valid record type",
         },
         {status: 500}
       );
@@ -33,6 +32,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // const user = await UserModel.findById(id);
     const user = await UserModel.findById(id).populate("dnsList");
 
     if (!user) {
@@ -61,8 +61,8 @@ export async function POST(request: NextRequest) {
       user: user._id,
     });
 
-    let ObjId = new mongoose.Types.ObjectId(newRecord.id);
-
+    // let ObjId = new mongoose.Types.ObjectId(newRecord.id);
+    const ObjId = newRecord._id as mongoose.Types.ObjectId;
     user.dnsList?.push(ObjId);
     // user.dnsList.push(newRecord._id);
     await user.save();

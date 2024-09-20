@@ -1,31 +1,18 @@
-export enum OpCode {
-  STANDARD_QUERY = 0,
-}
+import {buffer} from "stream/consumers";
 
-export enum ResponseCode {
-  NO_ERROR = 0,
-  FORMAT_ERROR = 1,
-}
+export const OpCode = {
+  STANDARD_QUERY: 0,
+};
 
-export interface TDNSHeader {
-  id: number;
-  qr: number;
-  opcode: OpCode;
-  aa: number;
-  tc: number;
-  rd: number;
-  ra: number;
-  z: number;
-  rcode: ResponseCode;
-  qdcount: number;
-  ancount: number;
-  nscount: number;
-  arcount: number;
-}
+export const ResponseCode = {
+  NO_ERROR: 0,  
+  FORMAT_ERROR: 1,
+};
 
-class DNSHeader {
-  static write(values: TDNSHeader) {
+class DNSHeaderJs {
+  static write(values) {
     const header = Buffer.alloc(12);
+
     const flags =
       ((values.qr & 1) << 15) | // QR (1 bit) - most significant bit
       ((values.opcode & 0xf) << 11) | // Opcode (4 bits)
@@ -37,14 +24,14 @@ class DNSHeader {
       (values.rcode & 0xf); // RCODE (4 bits)
 
     header.writeUint16BE(values.id, 0);
-    header.writeUint16BE(flags, 2);
+    header.writeUInt16BE(flags, 2);
     header.writeUint16BE(values.qdcount, 4);
     header.writeUint16BE(values.ancount, 6);
     header.writeUint16BE(values.nscount, 8);
     header.writeUint16BE(values.arcount, 10);
-
+    console.log(header, "Bhaisaab dekh lo ye hai header");
     return header;
   }
 }
 
-export default DNSHeader;
+export default DNSHeaderJs;
