@@ -9,10 +9,7 @@ export async function POST(request: NextRequest) {
   await dbConnect();
 
   try {
-    console.log("Reached Where db is connected ");
     const {hostName, recordType, id} = await request.json();
-    console.log(recordType, hostName, id, "JJJJJJJJJIUUUUUUUUUUUUUUU");
-    console.log("Reached here and got data to backend");
     if (!isValidDnsRecord(recordType)) {
       return NextResponse.json(
         {
@@ -21,7 +18,7 @@ export async function POST(request: NextRequest) {
         {status: 500}
       );
     }
-    console.log(hostName);
+    console.log(hostName, recordType, id);
     if (!hostName || !recordType || !id) {
       return NextResponse.json(
         {
@@ -32,13 +29,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // const user = await UserModel.findById(id);
-    const user = await UserModel.findById(id).populate("dnsList");
+    const user = await UserModel.findOne({id});
+    console.log(user);
+    // const user = await UserModel.findById(id).populate("dnsList");
 
     if (!user) {
       return NextResponse.json({message: "User not found"}, {status: 404});
     }
 
+    // user object id to be matched with DNSSchema user 
     const existingRecord = await DnsModel.findOne({
       user: user._id,
       hostName,

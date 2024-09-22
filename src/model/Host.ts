@@ -68,8 +68,8 @@ const UserSchema: Schema<User> = new Schema(
 );
 
 export const DnsModel =
-  (mongoose.models.Model as mongoose.Model<DNSModel>) ||
-  mongoose.model<DNSModel>("DNSModel", DNSSchema);
+  (mongoose.models.DNSModel as mongoose.Model<DNSModel>) ||
+  mongoose.model("DNSModel", DNSSchema);
 
 export const UserModel =
   (mongoose.models.User as mongoose.Model<User>) ||
