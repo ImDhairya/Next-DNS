@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const isUser = await UserModel.findOne({id});
+    const isUser = await UserModel.findOne({email});
     console.log("Found similar user or not found", isUser);
     if (isUser) {
       return NextResponse.json(

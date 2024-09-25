@@ -14,7 +14,32 @@ const HomePage = () => {
   if (!isSignedIn) {
     redirect("/sign-in");
   }
+  toSeeIsUserPresentOnDB();
   console.log(user, "Lets see what details i get of users");
+
+  async function toSeeIsUserPresentOnDB() {
+    const id = user?.id;
+    const userOnDb = await axios.post(
+      "http://localhost:3000/api/get-user",
+      id,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("SHIT GONE SOUTH ", userOnDb.data.success);
+
+    if (userOnDb.data.success) {
+      console.log("User there YAAAAAAAAAAAAAAYAAYAYAYAA");
+    } else {
+      // send data to the database call the function that sends data over the db
+      console.log("User not there NNAAAAAAAAAAAAANANANNANANAAAA");
+      await submitButnon();
+    }
+  }
+
   const currRecord = useStore((state) => state.record);
   const [input, setInput] = useState("");
   function handleSubmit() {
@@ -36,13 +61,6 @@ const HomePage = () => {
   }
 
   function submitButnon() {
-    console.log(
-      "IIIIIIIIIIIIIIMMMMMMMMPPPPP",
-      user?.id,
-      user?.username,
-      user?.fullName,
-      user?.primaryEmailAddress?.emailAddress
-    );
     const sendUser = axios.post("http://localhost:3000/api/add-user", {
       id: user?.id,
       username: user?.username,
