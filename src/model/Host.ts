@@ -26,7 +26,7 @@ const DNSSchema: Schema<DNSModel> = new Schema(
 );
 
 export interface User extends Document {
-  id: string;
+  clerk_id: string;
   username: string;
   fullName: string;
   email: string;
@@ -44,7 +44,7 @@ const UserSchema: Schema<User> = new Schema(
       type: String,
       required: true,
     },
-    id: {
+    clerk_id: {
       type: String,
       required: true,
       trim: true,

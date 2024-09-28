@@ -17,58 +17,6 @@ const HomePage = () => {
   if (!isSignedIn) {
     redirect("/sign-in");
   }
-  useEffect(() => {
-    async function checkAndSubmitUser() {
-      try {
-        const sendUser = await axios.post(
-          "http://localhost:3000/api/add-user",
-          {
-            id: user?.id,
-            username: user?.username,
-            fullName: user?.fullName,
-            email: user?.primaryEmailAddress?.emailAddress,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      } catch (error) {
-        console.error("Error checking user:", error);
-      }
-    }
-  }, []);
-
-  async function submitButnon() {
-    try {
-      const sendData = await axios.post(
-        "http://localhost:3000/api/add-user",
-        {
-          id: user?.id,
-          username: user?.username,
-          fullName: user?.fullName,
-          email: user?.primaryEmailAddress?.emailAddress,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Error submitting data:", error);
-    }
-
-    const sendUser = axios.post("http://localhost:3000/api/add-user", {
-      id: user?.id,
-      username: user?.username,
-      fullName: user?.fullName,
-      email: user?.primaryEmailAddress?.emailAddress,
-    });
-    // current record and input to send over axios
-    // Now sending user details over axios to create user if doesnot exists and just add if already exists {id, username, fullName, email}
-  }
 
   async function handleSubmit() {
     console.log(currRecord, "HHHHHH", input, user?.id);

@@ -6,6 +6,7 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up/",
   "/",
   "/home",
+  "/api/webhooks/clerk",
 ]);
 // const isPublicApiRoute = createRouteMatcher(["/api/videos"]);
 
@@ -16,7 +17,7 @@ export default clerkMiddleware((auth, req) => {
   const isApiRequest = currentUrl.pathname.startsWith("/api");
 
   // If user is logged in and accessing a public route but not the dashboard
-  // I don't want the user to go around login unless its from dashboard 
+  // I don't want the user to go around login unless its from dashboard
   if (userId && isPublicRoute(req) && !isAccessingDashboard) {
     return NextResponse.redirect(new URL("/home", req.url));
   }
@@ -31,7 +32,6 @@ export default clerkMiddleware((auth, req) => {
     if (!isPublicRoute(req)) {
       return NextResponse.redirect(new URL("/sign-in", req.url));
     }
-
   }
   return NextResponse.next();
 });

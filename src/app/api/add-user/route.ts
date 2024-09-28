@@ -6,10 +6,10 @@ import {NextRequest, NextResponse} from "next/server";
 export async function POST(request: NextRequest) {
   await dbConnect();
   try {
-    const {id, username, fullName, email} = await request.json();
-    console.log(id, username, fullName, email, "GGGGGAAAAAAAYYYYYY");
+    const {clerk_id, username, fullName, email} = await request.json();
+    console.log(clerk_id, username, fullName, email, "GGGGGAAAAAAAYYYYYY");
 
-    if (!email || !id || !username) {
+    if (!email || !clerk_id || !username) {
       return NextResponse.json(
         {
           // message: "Please fill all the required fields",
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 
     // create new user
 
-    await UserModel.create({id, username, fullName, email});
+    await UserModel.create({clerk_id, username, fullName, email});
 
     return NextResponse.json(
       {
