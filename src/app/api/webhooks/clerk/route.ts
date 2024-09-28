@@ -74,6 +74,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    console.log("New user created over db successfully ")
     return NextResponse.json({
       message: "New user created",
       user: newUser,

@@ -26,7 +26,7 @@ const HomePage = () => {
         {
           hostName: input,
           recordType: currRecord,
-          id: user?.id,
+          clerk_id: user?.id,
           // userId,
         },
         {
