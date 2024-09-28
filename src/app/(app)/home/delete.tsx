@@ -13,53 +13,39 @@ const HomePage = () => {
   const {isSignedIn, user} = useUser();
   const [input, setInput] = useState("");
   const currRecord = useStore((state) => state.record);
-
   if (!isSignedIn) {
     redirect("/sign-in");
   }
+
   useEffect(() => {
-    async function checkAndSubmitUser() {
-      try {
-        const sendUser = await axios.post(
-          "http://localhost:3000/api/add-user",
-          {
-            id: user?.id,
-            username: user?.username,
-            fullName: user?.fullName,
-            email: user?.primaryEmailAddress?.emailAddress,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      } catch (error) {
-        console.error("Error checking user:", error);
-      }
-    }
+    checkAndSubmitUser();
   }, []);
 
-  async function submitButnon() {
+  async function checkAndSubmitUser() {
     try {
-      const sendData = await axios.post(
-        "http://localhost:3000/api/add-user",
-        {
-          id: user?.id,
-          username: user?.username,
-          fullName: user?.fullName,
-          email: user?.primaryEmailAddress?.emailAddress,
-        },
+      // Check if the user already exists in the DB
+      const response = await axios.post(
+        "http://localhost:3000/api/get-user",
+        {id: user?.id}, // Pass user ID to check if they exist
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
-    } catch (error) {
-      console.error("Error submitting data:", error);
-    }
 
+      // If user does not exist, submit the user data
+      if (!response.data.success) {
+        await submitUser();
+      } else {
+        console.log("User already exists, no need to create.");
+      }
+    } catch (error) {
+      console.error("Error checking user:", error);
+    }
+  }
+
+  function submitButnon() {
     const sendUser = axios.post("http://localhost:3000/api/add-user", {
       id: user?.id,
       username: user?.username,
@@ -92,6 +78,20 @@ const HomePage = () => {
     }
   }
 
+  async function submitUser() {
+    try {
+      await axios.post("http://localhost:3000/api/add-user", {
+        id: user?.id,
+        username: user?.username,
+        fullName: user?.fullName,
+        email: user?.primaryEmailAddress?.emailAddress,
+      });
+    } catch (error) {
+      console.error("Error adding user:", error);
+    }
+    // current record and input to send over axios
+    // Now sending user details over axios to create user if doesnot exists and just add if already exists {id, username, fullName, email}
+  }
   return (
     <div className=" md:flex md:items-center sm:justify-center grid place-items-center grid-cols-1 gap-4 h-screen">
       <div className=" ">
@@ -110,9 +110,9 @@ const HomePage = () => {
         <DropdownMenuRadioGroupDemo />
       </div>
       <div>
-        {/* <Button onClick={() => submitButnon()}>
+        <Button onClick={() => submitButnon()}>
           Add user (button for testing)
-        </Button> */}
+        </Button>
       </div>
       <div>
         {!currRecord ? null : (

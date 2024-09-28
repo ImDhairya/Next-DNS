@@ -6,20 +6,30 @@ export async function POST(request: NextRequest) {
   dbConnect();
   try {
     const id = await request.json();
-    const user = await UserModel.findOne({id});
-    console.log(user, "HALASLLAYUAAAAAAA");
+    console.log(Object.values(id)[0], "Hellow Jis ");
+    const idValue = Object.values(id)[0];
+    const user = await UserModel.findOne({id: idValue});
+    console.log(
+      user,
+      " This means the user is there if it is null then user not there "
+    );
     if (user) {
       return NextResponse.json({
         message: "Successfully fetched data",
         success: true,
       });
-    }
-    if (user == null) {
+    } else {
       return NextResponse.json({
-        message: "NO user found",
+        message: "Not found user",
         success: false,
       });
     }
+    // if (user == null) {
+    //   return NextResponse.json({
+    //     message: "NO user found",
+    //     success: false,
+    //   });
+    // }
   } catch (error) {
     console.log(error);
     return NextResponse.json(
