@@ -20,7 +20,7 @@ export function DropdownMenuRadioGroupDemo() {
   const currRecord = useStore((state) => state.record);
   const updatedRecords = useStore((state) => state.updatedRecords);
 
-  function handleChange(newRecord: string) {
+  function handleChange(newRecord?: string) {
     // const record = useStore((state) => state.record);
     updatedRecords(newRecord);
   }

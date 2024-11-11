@@ -1,16 +1,25 @@
 import {create} from "zustand";
 
-export interface RecordStore {
+export type RecordStore = {
   record: any;
   updatedRecords(data: any): void;
   removeAllRecords: () => void;
-}
+};
 
-const useStore = create<RecordStore>((set) => ({
+export type UpdateTable = {
+  tableData: any;
+  updateTableData(data: any): void;
+};
+
+const useStore = create<RecordStore & UpdateTable>()((set) => ({
   record: "",
+  tableData: "",
   removeAllRecords: () => set({record: ""}),
   updatedRecords: (data: any) => {
     set(() => ({record: data}));
+  },
+  updateTableData: (data: any) => {
+    set(() => ({tableData: data}));
   },
 }));
 

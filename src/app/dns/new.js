@@ -4,11 +4,7 @@ import DNSQuestionJs from "./parts/question.js";
 import {DNSType, DNSClass} from "./parts/question.js";
 import {OpCode, ResponseCode} from "./parts/headers.js";
 import DNSAnswerJs from "./parts/answer.js";
-// import DNSHeader, {OpCode, ResponseCode, TDNSHeader} from "./parts/headers";
-// import DNSQuestion, {DNSClass, DNSType, IDNSQuestion} from "./parts/question";
-// import {DNSClass} from "./parts/question.js";
-// import {ResponseCode} from "./parts/headers.js";
-// import DNSAnswer, {IDNSAnswer} from "./parts/answer";
+
 const port = 53;
 
 const defaultHeader = {
@@ -49,8 +45,8 @@ udpSocket.on("message", (data, remoteAddr) => {
     const question = DNSQuestionJs.write([defaultQuestion]);
     const header = DNSHeaderJs.write({
       ...defaultHeader,
-      qdcount: 1,
-      ancount: 1,
+      qdcount: qdcount++,
+      ancount: ancount++,
     });
     const answer = DNSAnswerJs.write([defaultAnswer]);
     const response = Buffer.concat([header, question, answer]);
