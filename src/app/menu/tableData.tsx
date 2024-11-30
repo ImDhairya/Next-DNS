@@ -21,7 +21,6 @@ const TableDisplay = () => {
 
   // table data is used for setting the table it cannot be used for getting the data
   const tableRecord = useStore((state) => state.tableData);
-  console.log(tableRecord, "Tab");
   async function getData() {
     const fetchData = await axios.get("http://localhost:3000/api/get-data");
     console.log(fetchData.data.data);
@@ -30,7 +29,6 @@ const TableDisplay = () => {
   useEffect(() => {
     getData();
   }, [callTableUpdate]);
-  console.log(data);
   return (
     <div>
       <Table>

@@ -26,7 +26,6 @@ export function isValidDnsRecord(recordType: string) {
     "LOC",
     "DNAME",
   ];
-  console.log("DDDDDDDDDDDDDDDDDDDDDD", recordType);
   if (recordType) {
     return validRecordTypes.includes(recordType.split(" ")[0] as DnsRecordType);
   }

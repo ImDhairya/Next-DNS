@@ -45,7 +45,7 @@ const HomePage = () => {
   }
   // This is how im gonna add data over the server
   async function handleSubmit() {
-    console.log(currRecord, "HHHHHH", input, user?.id);
+    // console.log(currRecord, "HHHHHH", input, user?.id);
     try {
       const sendData = await axios.post(
         "http://localhost:3000/api/add-data",
